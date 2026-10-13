@@ -29,6 +29,14 @@ A responsive 2D lane racer built with Canvas, vanilla JavaScript, Express, and M
 
 The same Express server serves the frontend and JSON API; no separate frontend build step is needed. Without MongoDB, the home screen and guest game can still load, but account, score, and leaderboard routes need a live database.
 
+## Deploy to Vercel
+
+1. Import `https://github.com/irfan0503/car-game` into Vercel and keep the project root set to `.`. Vercel detects the root Express entry point and serves the `public/` frontend as static assets.
+2. Add `MONGODB_URI` and `JWT_SECRET` in **Project Settings → Environment Variables** for Production (and Preview if needed). Use a MongoDB Atlas database reachable from Vercel; do not commit these values.
+3. Deploy from the Vercel dashboard, or run `npx vercel --prod` after linking the project with the Vercel CLI.
+
+The `/api/health` endpoint does not require MongoDB. Database-backed routes connect lazily and reuse the MongoDB connection within each serverless instance.
+
 ## Play
 
 - Select **Start your run**. Steer with **← / →** or **A / D**. On touchscreens, hold the on-screen steering buttons.
@@ -68,7 +76,7 @@ backend/
   utils/scoreRules.js
   app.js
   server.js
-frontend/
+public/
   js/api.js
   js/app.js
   js/audio.js
@@ -76,6 +84,7 @@ frontend/
   index.html
   styles.css
 .env.example
+index.js
 ```
 
 ## Verify

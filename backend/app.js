@@ -3,18 +3,24 @@ import { fileURLToPath } from 'node:url';
 import express from 'express';
 import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit';
+import { connectDatabase } from './database.js';
 import authRoutes from './routes/auth.js';
 import gameRoutes from './routes/games.js';
 
 const app = express();
-const frontendDirectory = fileURLToPath(new URL('../frontend/', import.meta.url));
+const frontendDirectory = fileURLToPath(new URL('../public/', import.meta.url));
 
 app.disable('x-powered-by');
 app.use(helmet({ crossOriginEmbedderPolicy: false }));
 app.use(express.json({ limit: '10kb' }));
+app.get('/api/health', (_request, response) => response.json({ status: 'ok' }));
+if (process.env.VERCEL) {
+  app.use('/api', (_request, _response, next) => {
+    connectDatabase().then(() => next()).catch(next);
+  });
+}
 app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1_000, limit: 30 }), authRoutes);
 app.use('/api', rateLimit({ windowMs: 60 * 1_000, limit: 120 }), gameRoutes);
-app.get('/api/health', (_request, response) => response.json({ status: 'ok' }));
 app.use(express.static(frontendDirectory));
 app.get('*path', (_request, response) => response.sendFile(path.join(frontendDirectory, 'index.html')));
 

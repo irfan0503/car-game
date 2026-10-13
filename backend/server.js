@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import mongoose from 'mongoose';
 import app from './app.js';
+import { connectDatabase } from './database.js';
 
 const port = Number(process.env.PORT) || 3000;
 const jwtSecret = process.env.JWT_SECRET;
@@ -10,7 +10,7 @@ if (!jwtSecret || jwtSecret.length < 32) {
 }
 
 try {
-  await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/apex-shift');
+  await connectDatabase();
   app.listen(port, () => console.log(`APEX // SHIFT is running at http://localhost:${port}`));
 } catch (error) {
   console.error(`Could not connect to MongoDB: ${error.message}`);
