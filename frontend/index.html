@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#141814">
+    <meta name="description" content="Jump into APEX // SHIFT, a quick-fire neon road racer. Chase your personal best and climb the global leaderboard.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <title>APEX // SHIFT — Road Racer</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="wordmark" href="#home" aria-label="Apex Shift home">
+          <span class="wordmark-mark" aria-hidden="true">A</span>
+          <span>APEX <i>//</i> SHIFT</span>
+        </a>
+        <nav class="topnav" aria-label="Main navigation">
+          <button class="nav-link" id="leaderboardNav" type="button">Leaderboard <span aria-hidden="true">↗</span></button>
+          <button class="nav-link" id="profileNav" type="button" hidden>My runs</button>
+          <button class="sound-button" id="soundButton" type="button" aria-label="Mute sound" aria-pressed="false" title="Toggle sound">
+            <svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Zm4 4a5 5 0 0 1 0 6m3-9a9 9 0 0 1 0 12" /></svg>
+            <svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Zm5 4 5 6m0-6-5 6" /></svg>
+          </button>
+          <button class="account-button" id="accountButton" type="button">Sign in <span aria-hidden="true">↗</span></button>
+        </nav>
+      </header>
+
+      <main>
+        <section class="view home-view" id="homeView" aria-labelledby="heroTitle">
+          <div class="home-grid">
+            <div class="hero-copy">
+              <p class="eyebrow"><span class="live-dot"></span> NIGHT RUNS / SEASON 01</p>
+              <h1 id="heroTitle">APEX<span>//</span><br>SHIFT</h1>
+              <p class="hero-subtitle">One more lane. One more run.<br>How long can you hold the line?</p>
+              <button class="primary-button" id="playButton" type="button">
+                <span class="play-icon" aria-hidden="true">▶</span> Start your run <span class="button-arrow" aria-hidden="true">↗</span>
+              </button>
+              <p class="keyboard-hint"><kbd>←</kbd><kbd>→</kbd> or <kbd>A</kbd><kbd>D</kbd> to steer</p>
+              <div class="hero-stats" aria-label="Your racing stats">
+                <div><span class="stat-label">PERSONAL BEST</span><strong id="homeBest">—</strong></div>
+                <div class="stat-divider"></div>
+                <div><span class="stat-label">WORLD RECORD</span><strong id="worldBest">—</strong></div>
+                <div class="stat-divider"></div>
+                <div><span class="stat-label">YOUR RANK</span><strong id="homeRank">GUEST</strong></div>
+              </div>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+              <div class="art-topline"><span>HIGHWAY 09</span><span>23:48:06 <span class="live-dot"></span></span></div>
+              <canvas id="previewCanvas" width="520" height="680"></canvas>
+              <div class="art-readout"><span>RUN IT<br>BACK.</span><span class="art-index">NO. <b>001</b></span></div>
+            </div>
+          </div>
+          <div class="ticker" aria-hidden="true"><div>STAY SHARP <b>✳</b> OWN THE NIGHT <b>✳</b> NO BRAKES <b>✳</b> STAY SHARP <b>✳</b> OWN THE NIGHT <b>✳</b> NO BRAKES <b>✳</b></div></div>
+          <section class="below-fold" aria-label="Race details">
+            <div><span class="section-index">01 / THE RACE</span><h2>Find your rhythm.<br>Then find another gear.</h2></div>
+            <div class="race-detail"><span>01</span><p>Thread the gaps.<br>One touch and it's over.</p></div>
+            <div class="race-detail"><span>02</span><p>Stay on the road.<br>Speed climbs every second.</p></div>
+            <div class="race-detail"><span>03</span><p>Post your best.<br>The board never sleeps.</p></div>
+          </section>
+        </section>
+
+        <section class="view game-view" id="gameView" aria-labelledby="gameHeading" hidden>
+          <div class="view-heading">
+            <div><p class="eyebrow"><span class="live-dot"></span> HIGHWAY 09 / LIVE</p><h2 id="gameHeading">THE NIGHT SHIFT</h2></div>
+            <button class="text-button" id="homeFromGame" type="button">← Back to garage</button>
+          </div>
+          <div class="game-layout">
+            <div class="game-machine">
+              <div class="game-scorebar">
+                <div><span class="stat-label">CURRENT RUN</span><strong id="liveScore">000000</strong></div>
+                <div class="run-state"><span class="live-dot"></span><span id="runState">READY</span></div>
+                <div class="speed-readout"><span class="stat-label">SPEED</span><strong id="speedReadout">00 <small>KM/H</small></strong></div>
+              </div>
+              <div class="game-stage" id="gameStage">
+                <canvas id="gameCanvas" width="480" height="640" aria-label="Racing game. Use left and right arrow keys or A and D to steer."></canvas>
+                <div class="game-overlay" id="gameOverlay" hidden>
+                  <span class="overlay-kicker" id="overlayKicker">RUN PAUSED</span>
+                  <h3 id="overlayTitle">TAKE A BREATH.</h3>
+                  <p id="overlayMessage">Your run is right where you left it.</p>
+                  <div class="overlay-actions" id="pauseActions">
+                    <button class="primary-button compact" id="resumeButton" type="button">Resume <span aria-hidden="true">→</span></button>
+                    <button class="text-button" id="quitButton" type="button">End this run</button>
+                  </div>
+                  <div class="overlay-actions" id="overActions" hidden>
+                    <button class="primary-button compact" id="restartButton" type="button">Race again <span aria-hidden="true">↗</span></button>
+                    <button class="text-button" id="resultsButton" type="button">View leaderboard</button>
+                  </div>
+                </div>
+              </div>
+              <div class="game-controls">
+                <div class="touch-controls" aria-label="Steering controls">
+                  <button class="steer-button" id="leftButton" type="button" aria-label="Steer left">←</button>
+                  <button class="steer-button" id="rightButton" type="button" aria-label="Steer right">→</button>
+                </div>
+                <span class="controls-hint">STEER <kbd>←</kbd><kbd>→</kbd> / <kbd>A</kbd><kbd>D</kbd></span>
+                <button class="pause-button" id="pauseButton" type="button" aria-label="Pause game" title="Pause game">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14m8-14v14" /></svg><span>PAUSE</span>
+                </button>
+              </div>
+            </div>
+            <aside class="run-sidebar">
+              <div class="sidebar-block"><span class="stat-label">YOUR GARAGE</span><strong id="gamePlayer">GUEST DRIVER</strong><p>Every second counts. Dodge traffic, dodge debris, and keep your nerve when the road gets fast.</p></div>
+              <div class="sidebar-record"><span>BEST RUN</span><strong id="sidebarBest">—</strong><span class="record-caption">YOUR TOP SCORE</span></div>
+              <div class="sidebar-tip"><span class="tip-mark">↗</span><p>Stay loose on the wheel. Small moves leave room for the next one.</p></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view leaderboard-view" id="leaderboardView" aria-labelledby="leaderboardHeading" hidden>
+          <div class="view-heading leaderboard-heading">
+            <div><p class="eyebrow"><span class="live-dot"></span> GLOBAL / ALL DRIVERS</p><h2 id="leaderboardHeading">THE LEADERBOARD</h2><p class="view-description">One road. Ten spots. No easy miles.</p></div>
+            <button class="text-button" id="homeFromBoard" type="button">← Back to garage</button>
+          </div>
+          <div class="table-wrap">
+            <div class="table-heading"><span>RANK</span><span>DRIVER</span><span>TOP SCORE</span><span>RUNS</span></div>
+            <div id="leaderboardRows" class="table-rows"><p class="empty-state">Loading the grid...</p></div>
+          </div>
+          <div class="board-footer"><span>UPDATED LIVE</span><span>MAKE YOUR MOVE <b>↗</b></span></div>
+        </section>
+
+        <section class="view leaderboard-view profile-view" id="profileView" aria-labelledby="profileHeading" hidden>
+          <div class="view-heading leaderboard-heading">
+            <div><p class="eyebrow"><span class="live-dot"></span> DRIVER / CAREER LOG</p><h2 id="profileHeading">YOUR RUNS</h2><p class="view-description" id="profileCaption">Every lap is part of the story.</p></div>
+            <button class="text-button" id="homeFromProfile" type="button">← Back to garage</button>
+          </div>
+          <div class="table-wrap">
+            <div class="table-heading score-table-heading"><span>DATE</span><span>SCORE</span><span>DURATION</span></div>
+            <div id="profileRows" class="table-rows"><p class="empty-state">Loading your runs...</p></div>
+          </div>
+          <div class="board-footer"><button class="text-button danger-button" id="logoutButton" type="button">Sign out ↗</button><span>YOUR LAST 50 RUNS</span></div>
+        </section>
+      </main>
+
+      <footer class="site-footer"><span>APEX // SHIFT <span>© 2026</span></span><span>DRIVE LIKE YOU MEAN IT <b>✳</b></span></footer>
+    </div>
+
+    <dialog class="auth-dialog" id="authDialog" aria-labelledby="authHeading">
+      <div class="dialog-heading"><span class="wordmark-mark" aria-hidden="true">A</span><button class="icon-close" id="closeAuthButton" type="button" aria-label="Close sign in">×</button></div>
+      <p class="eyebrow"><span class="live-dot"></span> DRIVER ACCOUNT</p>
+      <h2 id="authHeading">GET IN THE<br>DRIVER'S SEAT.</h2>
+      <div class="auth-switch" role="tablist" aria-label="Account action">
+        <button class="auth-tab is-active" id="loginTab" type="button" role="tab" aria-selected="true" data-auth-mode="login">Sign in</button>
+        <button class="auth-tab" id="registerTab" type="button" role="tab" aria-selected="false" data-auth-mode="register">Create account</button>
+      </div>
+      <form id="authForm">
+        <label class="form-field" id="usernameField" hidden><span>DRIVER NAME</span><input id="usernameInput" name="username" type="text" minlength="3" maxlength="20" autocomplete="username" placeholder="e.g. nightowl" pattern="[a-zA-Z0-9_]{3,20}"></label>
+        <label class="form-field"><span>EMAIL ADDRESS</span><input id="emailInput" name="email" type="email" maxlength="254" autocomplete="email" placeholder="you@example.com" required></label>
+        <label class="form-field"><span>PASSWORD</span><input id="passwordInput" name="password" type="password" minlength="8" maxlength="72" autocomplete="current-password" placeholder="At least 8 characters" required></label>
+        <p class="form-error" id="authError" role="alert" hidden></p>
+        <button class="primary-button auth-submit" id="authSubmit" type="submit">Sign in <span class="button-arrow" aria-hidden="true">↗</span></button>
+      </form>
+      <p class="dialog-footnote">Your best runs deserve a place on the board.</p>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
